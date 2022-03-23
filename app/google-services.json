@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "647896607243",
+    "project_id": "jahez-85223",
+    "storage_bucket": "jahez-85223.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647896607243:android:1491c9d3f2af3b787d750e",
+        "android_client_info": {
+          "package_name": "com.reem.jahez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647896607243-oq4fadv8r30mk8mnvjcjhgfubdito6fm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALqa2cZM-l55AxjZ_l4EfOmoQmwiUBbnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647896607243-oq4fadv8r30mk8mnvjcjhgfubdito6fm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
