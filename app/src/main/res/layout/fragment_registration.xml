@@ -11,11 +11,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="80dp"
-        android:scaleType="center"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/jahez"/>
     <TextView
@@ -23,7 +22,6 @@
         android:textSize="30dp"
         android:gravity="center"
         android:layout_marginTop="20dp"
-
         app:layout_constraintStart_toStartOf="@id/jahez_logo"
         app:layout_constraintEnd_toEndOf="@id/jahez_logo"
         app:layout_constraintTop_toBottomOf="@id/jahez_logo"
@@ -47,14 +45,13 @@
         android:layout_marginTop="2dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:hint="Email"
+        app:placeholderText="Enter your user name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_name"
-            app:placeholderText="example@mail.com"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
@@ -77,14 +74,13 @@
         android:layout_marginTop="2dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:hint="Email"
+        app:placeholderText="example@mail.com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/email_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
-            app:placeholderText="example@mail.com"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textEmailAddress"
@@ -105,7 +101,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:hint="Password"
+        app:placeholderText="Enter your password"
         app:layout_constraintEnd_toEndOf="@id/email_field"
         app:layout_constraintStart_toStartOf="@id/email_field"
         app:layout_constraintTop_toBottomOf="@id/password_title">
@@ -113,7 +109,6 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            app:placeholderText="Enter your password"
             android:layout_height="match_parent"
             android:inputType="textPassword"
             android:singleLine="true" />
@@ -126,7 +121,9 @@
         android:layout_marginTop="40dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textSize="18sp"
-        android:text="Log in"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/red"
+        android:text="Sign Up"
         app:layout_constraintTop_toBottomOf="@id/password_field"
         app:layout_constraintStart_toStartOf="@id/password_field"
         app:layout_constraintEnd_toEndOf="@id/password_field"
