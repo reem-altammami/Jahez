@@ -33,7 +33,7 @@ class AuthDataSource {
         var isLogin = false
         Firebase.auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task ->
             isLogin = task.isSuccessful
-        }
+        }.await()
         return isLogin
     }
 }

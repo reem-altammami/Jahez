@@ -1,7 +1,7 @@
 package com.reem.jahez.domain.usecase
 
 import com.reem.jahez.domain.repository.AuthRepository
-import com.reem.jahez.util.Response
+import com.reem.jahez.domain.models.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

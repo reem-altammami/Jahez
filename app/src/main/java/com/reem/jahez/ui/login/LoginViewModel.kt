@@ -39,48 +39,58 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : ViewM
     }
 
 
-fun validation(email:String ,password: String){
+fun validation(email:String ,password: String): Boolean {
     validationEmail(email)
-    validationPassword(password)
+            validationPassword(password)
+    return validationEmail(email)&&
+        validationPassword(password)
 }
-    private fun validationEmail(email : String){
+    private fun validationEmail(email : String):Boolean{
         when {
             email.isEmpty() -> {
                 _validation.update {
                     it.copy(email = 0)
                 }
+                return false
             }
             !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
                 _validation.update {
                     it.copy(email = 2)
                 }
+                return false
             }
             else -> {
                 _validation.update {
                     it.copy(email = 1)
                 }
+                return true
             }
         }
     }
-    private fun validationPassword(password: String){
+    private fun validationPassword(password: String):Boolean{
 when{
     password.isEmpty() -> {
         _validation.update {
             it.copy(password = 0)
         }
+        return false
     }
     password.length < 6 ->{
         _validation.update {
             it.copy(password = 2)
         }
+        return false
     }
     else -> {
         _validation.update {
             it.copy(password = 1)
+
         }
+        return true
     }
 }
     }
+
 
 }
 

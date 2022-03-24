@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.reem.jahez.R
 import com.reem.jahez.databinding.FragmentLoginBinding
 import dagger.hilt.EntryPoint
@@ -17,9 +18,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
- private var _binding :FragmentLoginBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val loginViewModel : LoginViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,49 +32,75 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding  = FragmentLoginBinding.inflate(inflater,container,false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        updateLoginState()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.loginButton.setOnClickListener {
-            loginViewModel.validation(binding.email.text.toString(),binding.password.text.toString())
-            setEditTextError()
+         if( loginViewModel.validation(
+                binding.email.text.toString(),
+                binding.password.text.toString()
+            )){
+             loginViewModel.login(
+                 binding.email.text.toString(),
+                 binding.password.text.toString()
+             )
+         } else{
+             setEditTextError()
+         }
         }
     }
 
-    fun setEditTextError(){
+    private fun updateLoginState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-               loginViewModel.validation.collect{
-                   when (it.email) {
-                       0 -> {
-                           binding.emailField.error = getString(R.string.required_field)
-                       }
-                       2 -> {
-                           binding.emailField.error = getString(R.string.not_correct)
-                       }
-                       else -> {
-                           binding.emailField.error = null
-                       }
-                   }
-                   when (it.password){
-                       0 -> {
-                           binding.passwordField.error = getString(R.string.required_field)
-                       }
-                       2 -> {
-                           binding.passwordField.error = getString(R.string.not_correct)
-                       }
-                      else -> {
-                          binding.passwordField.error = null
-                      }
-                   }
-               }
-
+                loginViewModel.loginUiState.collect {
+                    when {
+                        it.isLoading -> binding.loading.visibility = View.VISIBLE
+                        it.data != null -> findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
+                        it.message.isNotEmpty() -> {
+                            binding.loading.visibility = View.GONE
+                            binding.loginMessage.visibility = View.VISIBLE
+                            binding.loginMessage.text = it.message
+                        }
+                    }
+                }
             }
         }
     }
 
+    private fun setEditTextError() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                loginViewModel.validation.collect {
+                    when (it.email) {
+                        0 -> {
+                            binding.emailField.error = getString(R.string.required_field)
+                        }
+                        2 -> {
+                            binding.emailField.error = getString(R.string.not_correct)
+                        }
+                        else -> {
+                            binding.emailField.error = null
+                        }
+                    }
+                    when (it.password) {
+                        0 -> {
+                            binding.passwordField.error = getString(R.string.required_field)
+                        }
+                        2 -> {
+                            binding.passwordField.error = getString(R.string.not_correct)
+                        }
+                        else -> {
+                            binding.passwordField.error = null
+                        }
+                    }
+                }
 
+            }
+        }
+    }
 }

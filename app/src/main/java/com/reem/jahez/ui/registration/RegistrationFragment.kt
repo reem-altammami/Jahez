@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private val registrationViewModel: RegistrationViewModel by viewModels()
     var _binding: FragmentRegistrationBinding? = null
     val binding get() = _binding!!
