@@ -119,7 +119,6 @@
     app:layout_constraintBottom_toTopOf="@id/registration_button"
     app:layout_constraintStart_toStartOf="@id/registration_button"
     app:layout_constraintEnd_toEndOf="@id/registration_button"
-    android:text="Something went wrong , Try it again"
     android:textColor="@color/red"
     android:layout_marginBottom="10dp"
     android:visibility="gone"/>

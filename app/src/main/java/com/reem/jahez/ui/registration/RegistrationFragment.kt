@@ -90,15 +90,15 @@ class RegistrationFragment : Fragment() {
 
     fun validPassword(): Boolean =
         binding.password.text.toString().isNotEmpty() && binding.password.text.toString()
-            .equals("123456")
+            .length>=6
 
     private fun setUsernameEditTextError(): Boolean {
         return if (binding.userName.text.toString().isEmpty()) {
-            binding.usernameField.error = "Required field"
+            binding.usernameField.error = getString(R.string.required_field)
             false
         } else {
             if (!validUseName()) {
-                binding.usernameField.error = "Not Correct"
+                binding.usernameField.error = getString(R.string.not_correct)
                 false
             } else {
                 binding.usernameField.error = null

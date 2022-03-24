@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.LoginFragment">
+    tools:context=".ui.login.LoginFragment">
 
     <ImageView
         android:id="@+id/jahez_logo"
@@ -86,6 +86,17 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/login_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/login_button"
+        app:layout_constraintStart_toStartOf="@id/login_button"
+        app:layout_constraintEnd_toEndOf="@id/login_button"
+        android:textColor="@color/red"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_button"
         android:layout_width="0dp"
@@ -121,5 +132,15 @@
         app:layout_constraintTop_toTopOf="@id/helper"
         android:textStyle="bold"
         android:text="Sign Up"/>
+    <ImageView
+        android:id="@+id/loading"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/loading_animation"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
