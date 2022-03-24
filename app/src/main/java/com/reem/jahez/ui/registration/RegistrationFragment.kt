@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,16 +17,8 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RegistrationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -44,6 +37,7 @@ class RegistrationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+        updateRegistrationState()
         return binding.root
     }
 
@@ -57,7 +51,7 @@ class RegistrationFragment : Fragment() {
                         binding.email.text.toString(),
                         binding.password.text.toString()
                     )
-                    updateRegistrationState()
+//                    updateRegistrationState()
                 } else {
                     setEmailEditTextError()
                     setPasswordEditTextError()
@@ -69,10 +63,13 @@ class RegistrationFragment : Fragment() {
 
     fun updateRegistrationState() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 registrationViewModel.registrationUiState.collect {
                     when {
-                        it.isLoading -> binding.loading.visibility = View.VISIBLE
+                        it.isLoading -> {
+                            binding.loading.visibility = View.VISIBLE
+                            Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT).show()
+                        }
                         it.message.isNotEmpty() -> {
                             binding.loading.visibility = View.GONE
                             binding.registerMessage.visibility = View.VISIBLE
@@ -84,18 +81,18 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    fun validUseName(): Boolean =
+    private fun validUseName(): Boolean =
         binding.userName.text!!.isNotEmpty()
 
-    fun validEmail(): Boolean =
-        binding.email.text!!.contains("@" + ".")
+    private fun validEmail(): Boolean =
+        android.util.Patterns.EMAIL_ADDRESS.matcher(binding.email.text.toString()).matches()
 
 
     fun validPassword(): Boolean =
         binding.password.text.toString().isNotEmpty() && binding.password.text.toString()
-            .equals("12345")
+            .equals("123456")
 
-    fun setUsernameEditTextError(): Boolean {
+    private fun setUsernameEditTextError(): Boolean {
         return if (binding.userName.text.toString().isEmpty()) {
             binding.usernameField.error = "Required field"
             false
@@ -110,7 +107,7 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    fun setEmailEditTextError(): Boolean {
+    private fun setEmailEditTextError(): Boolean {
         return if (binding.email.text.toString().isEmpty()) {
             binding.emailField.error = "Required field"
             false
@@ -125,7 +122,7 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    fun setPasswordEditTextError(): Boolean {
+    private fun setPasswordEditTextError(): Boolean {
         return if (binding.password.text.toString().isEmpty()) {
             binding.passwordField.error = "Required field"
             false

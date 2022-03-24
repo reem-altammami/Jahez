@@ -8,6 +8,7 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
 
 class AuthDataSource {
 
@@ -25,7 +26,7 @@ class AuthDataSource {
                     isRegister= false
                 }
 
-            }
+            }.await()
         return isRegister
     }
     suspend fun logIn(email:String,password:String) :Boolean {
