@@ -30,7 +30,7 @@ private const val ARG_PARAM2 = "param2"
 class RegistrationFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private val registrationViewModel: RegistrationViewModel by viewModels()
-   var _binding :FragmentRegistrationBinding? = null
+    var _binding: FragmentRegistrationBinding? = null
     val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,29 +43,101 @@ class RegistrationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentRegistrationBinding.inflate(inflater,container,false)
+        _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.apply {
+            registrationButton.setOnClickListener {
+                if (setEmailEditTextError() && setPasswordEditTextError() && setUsernameEditTextError()) {
+                    registrationViewModel.createNewUser(
+                        binding.userName.text.toString(),
+                        binding.email.text.toString(),
+                        binding.password.text.toString()
+                    )
+                    updateRegistrationState()
+                } else {
+                    setEmailEditTextError()
+                    setPasswordEditTextError()
+                    setUsernameEditTextError()
+                }
+            }
+        }
     }
 
-    fun updateRegistrationState(){
-        lifecycleScope.launch{
+    fun updateRegistrationState() {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                registrationViewModel.registrationUiState.collect{
+                registrationViewModel.registrationUiState.collect {
                     when {
-                        it.isLoading ->  binding.loading.visibility = View.VISIBLE
+                        it.isLoading -> binding.loading.visibility = View.VISIBLE
                         it.message.isNotEmpty() -> {
                             binding.loading.visibility = View.GONE
                             binding.registerMessage.visibility = View.VISIBLE
                         }
-                        it.data != null-> findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
+                        it.data != null -> findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
                     }
                 }
             }
         }
     }
+
+    fun validUseName(): Boolean =
+        binding.userName.text!!.isNotEmpty()
+
+    fun validEmail(): Boolean =
+        binding.email.text!!.contains("@" + ".")
+
+
+    fun validPassword(): Boolean =
+        binding.password.text.toString().isNotEmpty() && binding.password.text.toString()
+            .equals("12345")
+
+    fun setUsernameEditTextError(): Boolean {
+        return if (binding.userName.text.toString().isEmpty()) {
+            binding.usernameField.error = "Required field"
+            false
+        } else {
+            if (!validUseName()) {
+                binding.usernameField.error = "Not Correct"
+                false
+            } else {
+                binding.usernameField.error = null
+                true
+            }
+        }
+    }
+
+    fun setEmailEditTextError(): Boolean {
+        return if (binding.email.text.toString().isEmpty()) {
+            binding.emailField.error = "Required field"
+            false
+        } else {
+            if (!validEmail()) {
+                binding.emailField.error = "Not correct"
+                false
+            } else {
+                binding.emailField.error = null
+                true
+            }
+        }
+    }
+
+    fun setPasswordEditTextError(): Boolean {
+        return if (binding.password.text.toString().isEmpty()) {
+            binding.passwordField.error = "Required field"
+            false
+        } else {
+            if (!validPassword()) {
+                binding.passwordField.error = "Not correct"
+                false
+            } else {
+                binding.passwordField.error = null
+                true
+            }
+        }
+    }
+
 }
