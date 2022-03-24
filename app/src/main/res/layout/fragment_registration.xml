@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.RegistrationFragment">
+    tools:context=".ui.registration.RegistrationFragment">
 
     <ImageView
         android:id="@+id/jahez_logo"
@@ -112,9 +112,19 @@
             android:inputType="textPassword"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
-
+<TextView
+    android:id="@+id/register_message"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toTopOf="@id/registration_button"
+    app:layout_constraintStart_toStartOf="@id/registration_button"
+    app:layout_constraintEnd_toEndOf="@id/registration_button"
+    android:text="Something went wrong , Try it again"
+    android:textColor="@color/red"
+    android:layout_marginBottom="10dp"
+    android:visibility="gone"/>
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/login_button"
+        android:id="@+id/registration_button"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="40dp"
@@ -136,7 +146,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_button"/>
+        app:layout_constraintTop_toBottomOf="@id/registration_button"/>
 
     <TextView
         android:id="@+id/signup"
@@ -148,5 +158,11 @@
         app:layout_constraintTop_toTopOf="@id/helper"
         android:textStyle="bold"
         android:text="Log In"/>
+    <ImageView
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/loading_animation"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

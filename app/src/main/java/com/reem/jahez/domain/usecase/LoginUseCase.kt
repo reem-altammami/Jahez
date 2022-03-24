@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import java.lang.Exception
 import javax.inject.Inject
 
-class LoginUseCase @Inject constructor(val authRepository: AuthRepository) {
+class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
     suspend operator  fun invoke(email:String, password:String) : Flow<Response<Boolean>> = flow{
         try {
             emit(Response.Loading())
