@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Jahez/app/src/main/res/drawable/ic_offer_icon.xml" value="0.24479166666666666" />
+        <entry key="..\:/Jahez/app/src/main/res/drawable/image_border.xml" value="0.24479166666666666" />
         <entry key="..\:/Jahez/app/src/main/res/layout/activity_main.xml" value="0.17889492753623187" />
         <entry key="..\:/Jahez/app/src/main/res/layout/fragment_login.xml" value="0.35988200589970504" />
         <entry key="..\:/Jahez/app/src/main/res/layout/fragment_registration.xml" value="0.17889492753623187" />
+        <entry key="..\:/Jahez/app/src/main/res/layout/fragment_restaurants.xml" value="0.11094224924012158" />
+        <entry key="..\:/Jahez/app/src/main/res/layout/restaurant_item.xml" value="0.1" />
       </map>
     </option>
   </component>
