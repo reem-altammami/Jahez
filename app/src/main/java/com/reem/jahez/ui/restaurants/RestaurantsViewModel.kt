@@ -35,30 +35,46 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
                        }
                        is Response.Success ->{
                            Log.e("res","${response.data}")
-                          val restaurantList = response.data?.map {
+                          val restaurantList = response.data?.sortedByDescending { "rating"}?.map {
                               RestaurantsItemUi(
                                   name = it?.name!! ,
                                   image = it.image!!,
                                   hasOffer = it.hasOffer!!,
                                   offer = it.offer ,
-                                  distance = it.distance!!,
-                                  rate = it.rating!!,
+                                  distance = String.format("%.1f", it.distance),
+                                  rate = it.rating!!.toString(),
                               )
+
                           }
+                           Log.e("list","${restaurantList}")
                            _restaurantUi.update {
                            it.copy(
-                               restaurantsItemList = restaurantList!!
+                               restaurantsItemList = restaurantList!!,
+                               isLoading = false,
+                               message = ""
                            )
                        }
                    }
                        is Response.Error -> _restaurantUi.update {
                            it.copy(
-                               message = response.message.toString()
+                               message = response.message.toString(),
+                               isLoading = false,
+                               restaurantsItemList = listOf()
                            )
                        }
                 }
 
             }
         }
+    }
+
+    fun customList(sort:String, filter: String , list:List<RestaurantsItemUi>):List<RestaurantsItemUi>{
+       return if (filter.isNotEmpty()) {
+             list.sortedByDescending { sort }.filter { it.hasOffer }
+        } else{
+           list.sortedByDescending { sort }
+
+       }
+
     }
 }

@@ -10,6 +10,6 @@ data class RestaurantsItemUi(
     val image: String="",
     val hasOffer: Boolean=false,
     val offer :String? =null,
-    val distance: Double = 0.0,
-    val rate : Double = 0.0
+    val distance:  String= "",
+    val rate :  String= ""
 )

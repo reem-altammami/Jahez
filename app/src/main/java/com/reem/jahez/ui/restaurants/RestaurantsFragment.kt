@@ -40,7 +40,7 @@ private val binding get() = _binding!!
         setHasOptionsMenu(true)
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED){
+            repeatOnLifecycle(Lifecycle.State.STARTED){
                 restaurantsViewModel.restaurantUi.collect{
                     when{
                         it.isLoading -> binding.loading.visibility =View.VISIBLE
