@@ -71,16 +71,27 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
     }
 
     private fun customList(sort:String, filter: String, list: List<RestaurantItem>?): List<RestaurantItem> {
-         if (filter.isNotEmpty()&& sort.isNotEmpty()) {
-            return list!!.sortedByDescending { sort }.filter { it.hasOffer!! }
+        var newList = list!!
+          if (filter.isNotEmpty()&& sort.isNotEmpty()) {
+                  if (sort=="distance") {
+                      newList= list!!.sortedBy { it.distance }.filter { it.hasOffer!! }
+                  } else
+                      if(sort =="rating"){
+                          newList=  list!!.sortedBy { it.rating }.filter { it.hasOffer!! }
+                      }
         } else
             if (sort.isNotEmpty() && filter.isEmpty()){
-             return   list!!.sortedByDescending {it.distance}
-
+                   if (sort=="distance") {
+                       newList= list!!.sortedBy { it.distance }
+                } else
+                    if(sort =="rating"){
+                        newList=  list!!.sortedBy { it.rating }
+                }
             }else if(sort.isEmpty()&&filter.isNotEmpty()){
-             return   list!!.filter { it.hasOffer!! }
+                newList=   list!!.filter { it.hasOffer!! }
             } else{
-                return list!!
+                newList= list!!
             }
+        return  newList
     }
 }

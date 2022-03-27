@@ -3,13 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Jahez/app/src/main/res/drawable/ic_filter.xml" value="0.24479166666666666" />
         <entry key="..\:/Jahez/app/src/main/res/drawable/ic_offer_icon.xml" value="0.24479166666666666" />
+        <entry key="..\:/Jahez/app/src/main/res/drawable/ic_sort.xml" value="0.24479166666666666" />
         <entry key="..\:/Jahez/app/src/main/res/drawable/image_border.xml" value="0.24479166666666666" />
         <entry key="..\:/Jahez/app/src/main/res/drawable/offer_border.xml" value="0.13125" />
         <entry key="..\:/Jahez/app/src/main/res/layout/activity_main.xml" value="0.17889492753623187" />
         <entry key="..\:/Jahez/app/src/main/res/layout/fragment_login.xml" value="0.35988200589970504" />
         <entry key="..\:/Jahez/app/src/main/res/layout/fragment_registration.xml" value="0.17889492753623187" />
-        <entry key="..\:/Jahez/app/src/main/res/layout/fragment_restaurants.xml" value="0.19781221513217867" />
+        <entry key="..\:/Jahez/app/src/main/res/layout/fragment_restaurants.xml" value="0.3293323330832708" />
         <entry key="..\:/Jahez/app/src/main/res/layout/restaurant_item.xml" value="0.5142857142857143" />
         <entry key="..\:/Jahez/app/src/main/res/menu/filter_menu.xml" value="0.11302083333333333" />
         <entry key="..\:/Jahez/app/src/main/res/menu/menu.xml" value="0.11302083333333333" />
