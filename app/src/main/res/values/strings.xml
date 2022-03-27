@@ -6,4 +6,10 @@
     <string name="not_correct">Not Correct</string>
     <string name="distance">distance</string>
     <string name="rating">rating</string>
+    <string name="Rating">Rating</string>
+    <string name="has_offer">hasOffer</string>
+    <string name="offer">offer</string>
+    <string name="show_all">Show All</string>
+    <string name="nearest">Nearest</string>
+    <string name="reset">Reset</string>
 </resources>

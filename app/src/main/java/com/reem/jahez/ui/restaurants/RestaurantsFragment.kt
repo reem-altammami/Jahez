@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RestaurantsFragment : Fragment() {
-  private var _binding : FragmentRestaurantsBinding? = null
-private val binding get() = _binding!!
-    private val restaurantsViewModel : RestaurantsViewModel by viewModels()
+    private var _binding: FragmentRestaurantsBinding? = null
+    private val binding get() = _binding!!
+    private val restaurantsViewModel: RestaurantsViewModel by viewModels()
     private var sort = ""
     private var filter = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,9 +35,9 @@ private val binding get() = _binding!!
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentRestaurantsBinding.inflate(inflater,container,false)
+        _binding = FragmentRestaurantsBinding.inflate(inflater, container, false)
 
-        binding!!.searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener,
+        binding!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -59,28 +59,28 @@ private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner=viewLifecycleOwner
-        binding.restaurantsViewModel=restaurantsViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.restaurantsViewModel = restaurantsViewModel
         binding.recyclerView.adapter = RestaurantsAdapter()
         binding.sort.setOnClickListener { showSortPopupMenu(binding.sort) }
         binding.filter.setOnClickListener { showFilterPopupMenu(binding.filter) }
         setHasOptionsMenu(true)
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                restaurantsViewModel.restaurantUi.collect{
-                    when{
-                        it.isLoading -> binding.loading.visibility =View.VISIBLE
-                        it.restaurantsItemList !=null -> {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                restaurantsViewModel.restaurantUi.collect {
+                    when {
+                        it.isLoading -> binding.loading.visibility = View.VISIBLE
+                        it.restaurantsItemList != null -> {
                             binding.loading.visibility = View.GONE
                             bindRecyclerView(binding.recyclerView, it.restaurantsItemList)
                         }
                         it.message.isNotEmpty() -> {
-                        binding.loading.visibility = View.GONE
-                        binding.errorMessage.visibility=View.VISIBLE
-                        binding.errorMessage.text = it.message
+                            binding.loading.visibility = View.GONE
+                            binding.errorMessage.visibility = View.VISIBLE
+                            binding.errorMessage.text = it.message
 
-                    }
+                        }
                     }
                 }
             }
@@ -124,7 +124,7 @@ private val binding get() = _binding!!
             when (item!!.itemId) {
 
                 R.id.filter_offer -> {
-                    filter = "hasOffer"
+                    filter = getString(R.string.has_offer)
                 }
                 R.id.all -> {
                     filter = ""

@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/filter_offer"
-        android:title="offer"
+        android:title="@string/offer"
         />
     <item
         android:id="@+id/all"
-        android:title="Show All"
+        android:title="@string/show_all"
         />
 
 
