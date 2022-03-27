@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reem.jahez.domain.models.Response
+import com.reem.jahez.domain.models.RestaurantItem
 import com.reem.jahez.domain.models.RestaurantsItemUi
 import com.reem.jahez.domain.models.RestaurantsUi
 import com.reem.jahez.domain.usecase.GetRestaurantsUseCase
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +24,7 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
         getRestaurants()
     }
 
-    private fun getRestaurants(){
+     fun getRestaurants(sort:String="", filter: String=""){
         viewModelScope.launch {
                 val restaurants = gerRestaurantsUseCase().collect{ response ->
                    when(response){
@@ -35,7 +35,9 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
                        }
                        is Response.Success ->{
                            Log.e("res","${response.data}")
-                          val restaurantList = response.data?.sortedByDescending { "rating"}?.map {
+                          val restaurantList = response.data
+                           val customList = customList(sort,filter,restaurantList)
+                           .map {
                               RestaurantsItemUi(
                                   name = it?.name!! ,
                                   image = it.image!!,
@@ -49,7 +51,7 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
                            Log.e("list","${restaurantList}")
                            _restaurantUi.update {
                            it.copy(
-                               restaurantsItemList = restaurantList!!,
+                               restaurantsItemList = customList!!,
                                isLoading = false,
                                message = ""
                            )
@@ -68,13 +70,17 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
         }
     }
 
-    fun customList(sort:String, filter: String , list:List<RestaurantsItemUi>):List<RestaurantsItemUi>{
-       return if (filter.isNotEmpty()) {
-             list.sortedByDescending { sort }.filter { it.hasOffer }
-        } else{
-           list.sortedByDescending { sort }
+    private fun customList(sort:String, filter: String, list: List<RestaurantItem>?): List<RestaurantItem> {
+         if (filter.isNotEmpty()&& sort.isNotEmpty()) {
+            return list!!.sortedByDescending { sort }.filter { it.hasOffer!! }
+        } else
+            if (sort.isNotEmpty() && filter.isEmpty()){
+             return   list!!.sortedByDescending {it.distance}
 
-       }
-
+            }else if(sort.isEmpty()&&filter.isNotEmpty()){
+             return   list!!.filter { it.hasOffer!! }
+            } else{
+                return list!!
+            }
     }
 }
