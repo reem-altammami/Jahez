@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,24 @@ private val binding get() = _binding!!
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentRestaurantsBinding.inflate(inflater,container,false)
+
+        binding!!.searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener,
+            android.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                binding!!.searchView.clearFocus()
+                restaurantsViewModel.getRestaurants(search = query!!)
+
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                restaurantsViewModel.getRestaurants(search = query!!)
+
+                return true
+            }
+
+        })
         return binding.root
     }
 
@@ -119,7 +138,5 @@ private val binding get() = _binding!!
 
         popup.show()
     }
-
-
 
 }

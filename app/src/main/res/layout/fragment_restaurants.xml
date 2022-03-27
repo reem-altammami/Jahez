@@ -47,9 +47,24 @@
 <!--            android:scrollbars="vertical"-->
 <!--            app:listData="@{restaurantsViewModel.restaurantUi.restaurantsItemList}" />-->
 
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/image_border"
+            android:queryHint="Restaurant name"
+            app:layout_constraintEnd_toStartOf="@id/sort"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/recycler_view"
+            tools:text="kotlin" />
         <ImageButton
             android:id="@+id/filter"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/sort"
 app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="#00FFFFFF"
             android:src="@drawable/ic_filter"
@@ -57,7 +72,8 @@ app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="wrap_content"/>
         <ImageButton
             android:id="@+id/sort"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/searchView"
+            app:layout_constraintBottom_toBottomOf="@id/searchView"
             app:layout_constraintEnd_toStartOf="@id/filter"
             android:backgroundTint="#00FFFFFF"
             android:src="@drawable/ic_sort"

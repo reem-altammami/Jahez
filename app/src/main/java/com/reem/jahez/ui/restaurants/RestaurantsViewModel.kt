@@ -13,18 +13,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRestaurantsUseCase): ViewModel(){
     private val _restaurantUi : MutableStateFlow<RestaurantsUi> = MutableStateFlow(RestaurantsUi())
     val restaurantUi : StateFlow<RestaurantsUi> = _restaurantUi
+//    private var restaurantList : List<RestaurantItem> = listOf()
+    var newList :List<RestaurantItem> = listOf()
 
     init{
         getRestaurants()
     }
 
-     fun getRestaurants(sort:String="", filter: String=""){
+     fun getRestaurants(sort:String="", filter: String="" ,search:String=""){
         viewModelScope.launch {
                 val restaurants = gerRestaurantsUseCase().collect{ response ->
                    when(response){
@@ -35,8 +38,13 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
                        }
                        is Response.Success ->{
                            Log.e("res","${response.data}")
-                          val restaurantList = response.data
-                           val customList = customList(sort,filter,restaurantList)
+                      val    restaurantList = response.data!!
+                           newList = if (search.isNotEmpty()){
+                               search(search,restaurantList)
+                           } else{
+                               customList(sort,filter,restaurantList)
+                           }
+                          val customList =newList
                            .map {
                               RestaurantsItemUi(
                                   name = it?.name!! ,
@@ -93,5 +101,15 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
                 newList= list!!
             }
         return  newList
+    }
+
+    private fun search(name: String, list: List<RestaurantItem>?): List<RestaurantItem> {
+        var newList : MutableList<RestaurantItem> = mutableListOf()
+for (item in 0 until  list!!.size)
+    if (list[item].name?.toLowerCase()!!.contains(name)) {
+        val restaurant = list[item]
+        newList.add(restaurant!!)
+    }
+        return newList
     }
 }
