@@ -10,6 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.reem.jahez.R
 import com.reem.jahez.databinding.FragmentLoginBinding
 import dagger.hilt.EntryPoint
@@ -24,7 +26,9 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
+    findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
+}
     }
 
     override fun onCreateView(
