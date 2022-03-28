@@ -43,6 +43,9 @@ if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.signup.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
+        }
         binding.loginButton.setOnClickListener {
          if( loginViewModel.validation(
                 binding.email.text.toString(),

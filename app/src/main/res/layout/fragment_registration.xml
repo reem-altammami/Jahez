@@ -27,12 +27,12 @@
         app:layout_constraintTop_toBottomOf="@id/jahez_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registration" />
+        android:text="@string/registration" />
     <TextView
         android:id="@+id/username_title"
         app:layout_constraintTop_toBottomOf="@id/registration"
         app:layout_constraintStart_toStartOf="@id/email_field"
-        android:text="User name"
+        android:text="@string/user_name"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -61,7 +61,7 @@
         android:id="@+id/email_title"
         app:layout_constraintTop_toBottomOf="@id/username_field"
         app:layout_constraintStart_toStartOf="@id/email_field"
-        android:text="Email"
+        android:text="@string/email"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -90,7 +90,7 @@
         android:id="@+id/password_title"
         app:layout_constraintTop_toBottomOf="@id/email_field"
         app:layout_constraintStart_toStartOf="@id/email_field"
-        android:text="Password"
+        android:text="@string/password"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -131,7 +131,7 @@
         android:textSize="18sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/red"
-        android:text="Sign Up"
+        android:text="@string/sign_up"
         app:layout_constraintTop_toBottomOf="@id/password_field"
         app:layout_constraintStart_toStartOf="@id/password_field"
         app:layout_constraintEnd_toEndOf="@id/password_field"
@@ -140,7 +140,7 @@
         android:id="@+id/helper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already have an account? "
+        android:text="@string/already_have_an_account"
         android:textSize="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
@@ -148,15 +148,16 @@
         app:layout_constraintTop_toBottomOf="@id/registration_button"/>
 
     <TextView
-        android:id="@+id/signup"
+        android:id="@+id/login"
         android:clickable="true"
         android:textSize="16dp"
+        android:focusable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/helper"
         app:layout_constraintTop_toTopOf="@id/helper"
         android:textStyle="bold"
-        android:text="Log In"/>
+        android:text="@string/log_in"/>
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"

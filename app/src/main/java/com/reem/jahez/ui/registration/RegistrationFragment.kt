@@ -44,6 +44,9 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            login.setOnClickListener {
+                findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
+            }
             registrationButton.setOnClickListener {
                 if (setEmailEditTextError() && setPasswordEditTextError() && setUsernameEditTextError()) {
                     registrationViewModel.createNewUser(
@@ -61,7 +64,7 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    fun updateRegistrationState() {
+    private fun updateRegistrationState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 registrationViewModel.registrationUiState.collect {
@@ -74,7 +77,7 @@ class RegistrationFragment : Fragment() {
                             binding.loading.visibility = View.GONE
                             binding.registerMessage.visibility = View.VISIBLE
                         }
-                        it.data != null -> findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
+                        it.data != null -> findNavController().navigate(R.id.action_registrationFragment_to_restaurantsFragment)
                     }
                 }
             }

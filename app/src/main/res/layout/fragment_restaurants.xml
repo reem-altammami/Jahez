@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/loading"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +78,7 @@ app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="#00FFFFFF"
             android:src="@drawable/ic_sort"
             android:clickable="true"
+            android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
             <androidx.recyclerview.widget.RecyclerView
