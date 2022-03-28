@@ -104,12 +104,7 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
     }
 
     private fun search(name: String, list: List<RestaurantItem>?): List<RestaurantItem> {
-        var newList : MutableList<RestaurantItem> = mutableListOf()
-for (item in 0 until  list!!.size)
-    if (list[item].name?.toLowerCase()!!.contains(name)) {
-        val restaurant = list[item]
-        newList.add(restaurant!!)
-    }
-        return newList
+        val newList  = list?.filter { it.name!!.toLowerCase().contains(name.toLowerCase()) }
+        return newList!!
     }
 }
