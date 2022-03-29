@@ -42,7 +42,7 @@ fun validation(email:String ,password: String): Boolean {
     return validationEmail(email)&&
         validationPassword(password)
 }
-    private fun validationEmail(email : String):Boolean{
+    private fun validationEmail(email: String): Boolean {
         when {
             email.isEmpty() -> {
                 _validation.update {
@@ -64,28 +64,29 @@ fun validation(email:String ,password: String): Boolean {
             }
         }
     }
-    private fun validationPassword(password: String):Boolean{
-when{
-    password.isEmpty() -> {
-        _validation.update {
-            it.copy(password = 0)
-        }
-        return false
-    }
-    password.length < 6 ->{
-        _validation.update {
-            it.copy(password = 2)
-        }
-        return false
-    }
-    else -> {
-        _validation.update {
-            it.copy(password = 1)
 
+    private fun validationPassword(password: String): Boolean {
+        when {
+            password.isEmpty() -> {
+                _validation.update {
+                    it.copy(password = 0)
+                }
+                return false
+            }
+            password.length < 6 -> {
+                _validation.update {
+                    it.copy(password = 2)
+                }
+                return false
+            }
+            else -> {
+                _validation.update {
+                    it.copy(password = 1)
+
+                }
+                return true
+            }
         }
-        return true
-    }
-}
     }
 
 

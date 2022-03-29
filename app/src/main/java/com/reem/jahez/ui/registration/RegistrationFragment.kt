@@ -23,8 +23,8 @@ import kotlinx.coroutines.launch
 class RegistrationFragment : Fragment() {
 
     private val registrationViewModel: RegistrationViewModel by viewModels()
-    var _binding: FragmentRegistrationBinding? = null
-    val binding get() = _binding!!
+    private var _binding: FragmentRegistrationBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,18 +48,7 @@ class RegistrationFragment : Fragment() {
                 findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
             }
             registrationButton.setOnClickListener {
-                if (setEmailEditTextError() && setPasswordEditTextError() && setUsernameEditTextError()) {
-                    registrationViewModel.createNewUser(
-                        binding.userName.text.toString(),
-                        binding.email.text.toString(),
-                        binding.password.text.toString()
-                    )
-//                    updateRegistrationState()
-                } else {
-                    setEmailEditTextError()
-                    setPasswordEditTextError()
-                    setUsernameEditTextError()
-                }
+              clickRegistration()
             }
         }
     }
@@ -84,59 +73,56 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun validUseName(): Boolean =
-        binding.userName.text!!.isNotEmpty()
+    private fun setEditTextError() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                registrationViewModel.validation.collect {
+                    when(it.userName){
+                        0 -> {
+                            binding.usernameField.error = getString(R.string.required_field)
+                        }
+                        else -> {
+                            binding.usernameField.error = null
+                        }
+                    }
+                    when (it.email) {
+                        0 -> {
+                            binding.emailField.error = getString(R.string.required_field)
+                        }
+                        2 -> {
+                            binding.emailField.error = getString(R.string.not_correct)
+                        }
+                        else -> {
+                            binding.emailField.error = null
+                        }
+                    }
+                    when (it.password) {
+                        0 -> {
+                            binding.passwordField.error = getString(R.string.required_field)
+                        }
+                        2 -> {
+                            binding.passwordField.error = getString(R.string.not_correct)
+                        }
+                        else -> {
+                            binding.passwordField.error = null
+                        }
+                    }
+                }
 
-    private fun validEmail(): Boolean =
-        android.util.Patterns.EMAIL_ADDRESS.matcher(binding.email.text.toString()).matches()
-
-
-    fun validPassword(): Boolean =
-        binding.password.text.toString().isNotEmpty() && binding.password.text.toString()
-            .length>=6
-
-    private fun setUsernameEditTextError(): Boolean {
-        return if (binding.userName.text.toString().isEmpty()) {
-            binding.usernameField.error = getString(R.string.required_field)
-            false
-        } else {
-            if (!validUseName()) {
-                binding.usernameField.error = getString(R.string.not_correct)
-                false
-            } else {
-                binding.usernameField.error = null
-                true
             }
         }
     }
-
-    private fun setEmailEditTextError(): Boolean {
-        return if (binding.email.text.toString().isEmpty()) {
-            binding.emailField.error = "Required field"
-            false
-        } else {
-            if (!validEmail()) {
-                binding.emailField.error = "Not correct"
-                false
-            } else {
-                binding.emailField.error = null
-                true
-            }
-        }
-    }
-
-    private fun setPasswordEditTextError(): Boolean {
-        return if (binding.password.text.toString().isEmpty()) {
-            binding.passwordField.error = "Required field"
-            false
-        } else {
-            if (!validPassword()) {
-                binding.passwordField.error = "Not correct"
-                false
-            } else {
-                binding.passwordField.error = null
-                true
-            }
+    private fun clickRegistration(){
+        if (registrationViewModel.validation(
+                binding.userName.text.toString(),
+                binding.email.text.toString(),
+                binding.password.text.toString()
+        )){
+            registrationViewModel.createNewUser(  binding.userName.text.toString(),
+                binding.email.text.toString(),
+                binding.password.text.toString() )
+        }else{
+            setEditTextError()
         }
     }
 
