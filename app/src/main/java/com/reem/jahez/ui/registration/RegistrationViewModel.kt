@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reem.jahez.domain.usecase.CreateNewUserUseCase
 import com.reem.jahez.domain.models.AuthUiState
-import com.reem.jahez.domain.models.Response
+import com.reem.jahez.domain.models.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -23,9 +23,9 @@ class RegistrationViewModel @Inject constructor(private val createNewUserUseCase
         viewModelScope.launch {
           createNewUserUseCase(userName,email, password).onEach {
                when(it){
-                   is Response.Loading -> _registrationUiState.emit(AuthUiState(isLoading = true))
-                   is  Response.Success -> _registrationUiState.emit(AuthUiState(data = it.data))
-                   is Response.Error -> _registrationUiState.emit(AuthUiState(message = it.message.toString()))
+                   is Resource.Loading -> _registrationUiState.emit(AuthUiState(isLoading = true))
+                   is  Resource.Success -> _registrationUiState.emit(AuthUiState(data = it.data))
+                   is Resource.Error -> _registrationUiState.emit(AuthUiState(message = it.message.toString()))
                }
 
            }.launchIn(viewModelScope)

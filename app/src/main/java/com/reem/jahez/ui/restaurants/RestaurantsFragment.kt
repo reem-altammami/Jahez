@@ -37,23 +37,6 @@ class RestaurantsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentRestaurantsBinding.inflate(inflater, container, false)
 
-        binding!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            android.widget.SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                binding!!.searchView.clearFocus()
-                restaurantsViewModel.getRestaurants(search = query!!)
-
-                return true
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                restaurantsViewModel.getRestaurants(search = query!!)
-
-                return true
-            }
-
-        })
         return binding.root
     }
 
@@ -65,26 +48,9 @@ class RestaurantsFragment : Fragment() {
         binding.sort.setOnClickListener { showSortPopupMenu(binding.sort) }
         binding.filter.setOnClickListener { showFilterPopupMenu(binding.filter) }
         setHasOptionsMenu(true)
+        observeRestaurant()
+        search()
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                restaurantsViewModel.restaurantUi.collect {
-                    when {
-                        it.isLoading -> binding.loading.visibility = View.VISIBLE
-                        it.restaurantsItemList != null -> {
-                            binding.loading.visibility = View.GONE
-                            bindRecyclerView(binding.recyclerView, it.restaurantsItemList)
-                        }
-                        it.message.isNotEmpty() -> {
-                            binding.loading.visibility = View.GONE
-                            binding.errorMessage.visibility = View.VISIBLE
-                            binding.errorMessage.text = it.message
-
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private fun showSortPopupMenu(view: View) {
@@ -108,7 +74,7 @@ class RestaurantsFragment : Fragment() {
 
             }
 
-            restaurantsViewModel.getRestaurants(sort = sort, filter = filter)
+            restaurantsViewModel.sortRestaurants(sort)
             true
         }
 
@@ -132,11 +98,53 @@ class RestaurantsFragment : Fragment() {
 
             }
 
-            restaurantsViewModel.getRestaurants(sort = sort, filter = filter)
+            restaurantsViewModel.filterRestaurants(filter)
             true
         }
 
         popup.show()
+    }
+
+    fun observeRestaurant(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                restaurantsViewModel.restaurantUi.collect {
+                    when {
+                        it.isLoading -> binding.loading.visibility = View.VISIBLE
+                        it.restaurantsItemList != null -> {
+                            binding.loading.visibility = View.GONE
+                            bindRecyclerView(binding.recyclerView, it.restaurantsItemList)
+                        }
+                        it.message.isNotEmpty() -> {
+                            binding.loading.visibility = View.GONE
+                            binding.errorMessage.visibility = View.VISIBLE
+                            binding.errorMessage.text = it.message
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun search(){
+        binding!!.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            android.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                binding!!.searchView.clearFocus()
+                restaurantsViewModel.search(query!!)
+
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                restaurantsViewModel.search(query!!)
+
+                return true
+            }
+
+        })
     }
 
 }

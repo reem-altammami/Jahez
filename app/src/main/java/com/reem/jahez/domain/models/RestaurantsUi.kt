@@ -10,6 +10,10 @@ data class RestaurantsItemUi(
     val image: String="",
     val hasOffer: Boolean=false,
     val offer :String? =null,
-    val distance:  String= "",
+    val distance:  Double =0.0,
     val rate :  String= ""
-)
+) {
+    fun convertToString(dis: Double): String {
+        return String.format("%.2f", dis)
+    }
+}

@@ -80,7 +80,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/ic_distance"
                 android:layout_marginEnd="15dp"
-                android:text="@{restaurant.distance}"
+                android:text="@{restaurant.convertToString(restaurant.distance)}"
                 tools:text="2.9M" />
 
             <ImageView

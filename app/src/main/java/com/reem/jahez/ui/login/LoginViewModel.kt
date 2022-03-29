@@ -2,12 +2,9 @@ package com.reem.jahez.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.reem.jahez.domain.usecase.LoginUseCase
 import com.reem.jahez.domain.models.AuthUiState
-import com.reem.jahez.domain.models.Response
+import com.reem.jahez.domain.models.Resource
 import com.reem.jahez.domain.models.Validation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,9 +27,9 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : ViewM
         viewModelScope.launch {
             loginUseCase(email, password).collect {
                 when (it) {
-                    is Response.Loading -> _loginUiState.emit(AuthUiState(isLoading = true))
-                    is Response.Success -> _loginUiState.emit(AuthUiState(data = it.data))
-                    is Response.Error -> _loginUiState.emit(AuthUiState(message = it.message.toString()))
+                    is Resource.Loading -> _loginUiState.emit(AuthUiState(isLoading = true))
+                    is Resource.Success -> _loginUiState.emit(AuthUiState(data = it.data))
+                    is Resource.Error -> _loginUiState.emit(AuthUiState(message = it.message.toString()))
                 }
             }
         }
