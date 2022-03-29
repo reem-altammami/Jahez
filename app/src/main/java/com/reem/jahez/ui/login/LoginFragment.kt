@@ -13,13 +13,14 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.reem.jahez.R
+import com.reem.jahez.base.BaseFragment
 import com.reem.jahez.databinding.FragmentLoginBinding
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val loginViewModel: LoginViewModel by viewModels()
@@ -38,6 +39,7 @@ if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         updateLoginState()
+        setBaseViewModel(loginViewModel)
         return binding.root
     }
 
@@ -55,15 +57,9 @@ if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 loginViewModel.loginUiState.collect {
-                    when {
-                        it.isLoading -> binding.loading.visibility = View.VISIBLE
-                        it.data != null -> findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
-                        it.message.isNotEmpty() -> {
-                            binding.loading.visibility = View.GONE
-                            binding.loginMessage.visibility = View.VISIBLE
-                            binding.loginMessage.text = it.message
-                        }
-                    }
+
+                        if (it) findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
+
                 }
             }
         }

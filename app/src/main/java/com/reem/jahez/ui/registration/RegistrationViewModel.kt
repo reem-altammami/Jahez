@@ -2,19 +2,21 @@ package com.reem.jahez.ui.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.reem.jahez.base.BaseViewModel
 import com.reem.jahez.domain.usecase.CreateNewUserUseCase
-import com.reem.jahez.domain.models.AuthUiState
+
 import com.reem.jahez.domain.models.Resource
+import com.reem.jahez.domain.models.UiState
 import com.reem.jahez.domain.models.Validation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(private val createNewUserUseCase: CreateNewUserUseCase) :ViewModel() {
+class RegistrationViewModel @Inject constructor(private val createNewUserUseCase: CreateNewUserUseCase) :BaseViewModel() {
 
-   private var _registrationUiState = MutableSharedFlow<AuthUiState>()
-    val registrationUiState : SharedFlow<AuthUiState> = _registrationUiState
+   private var _registrationUiState = MutableSharedFlow<Boolean>()
+    val registrationUiState : SharedFlow<Boolean> = _registrationUiState
     private var _validation : MutableStateFlow<Validation> = MutableStateFlow(Validation())
     val validation :StateFlow <Validation> = _validation
 
@@ -23,9 +25,12 @@ class RegistrationViewModel @Inject constructor(private val createNewUserUseCase
         viewModelScope.launch {
           createNewUserUseCase(userName,email, password).onEach {
                when(it){
-                   is Resource.Loading -> _registrationUiState.emit(AuthUiState(isLoading = true))
-                   is  Resource.Success -> _registrationUiState.emit(AuthUiState(data = it.data))
-                   is Resource.Error -> _registrationUiState.emit(AuthUiState(message = it.message.toString()))
+                   is Resource.Loading -> _uiState.emit(UiState(isLoading = true))
+                   is  Resource.Success -> {
+                       _registrationUiState.emit(it.data ?: false)
+                       _uiState.emit(UiState())
+                   }
+                   is Resource.Error -> _uiState.emit(UiState(message = it.message.toString()))
                }
 
            }.launchIn(viewModelScope)

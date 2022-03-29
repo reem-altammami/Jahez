@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.reem.jahez.R
+import com.reem.jahez.base.BaseFragment
 import com.reem.jahez.databinding.FragmentRegistrationBinding
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class RegistrationFragment : Fragment() {
+class RegistrationFragment : BaseFragment() {
 
     private val registrationViewModel: RegistrationViewModel by viewModels()
     private var _binding: FragmentRegistrationBinding? = null
@@ -37,6 +38,7 @@ class RegistrationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+        setBaseViewModel(registrationViewModel)
         updateRegistrationState()
         return binding.root
     }
@@ -57,17 +59,8 @@ class RegistrationFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 registrationViewModel.registrationUiState.collect {
-                    when {
-                        it.isLoading -> {
-                            binding.loading.visibility = View.VISIBLE
-                            Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT).show()
-                        }
-                        it.message.isNotEmpty() -> {
-                            binding.loading.visibility = View.GONE
-                            binding.registerMessage.visibility = View.VISIBLE
-                        }
-                        it.data != null -> findNavController().navigate(R.id.action_registrationFragment_to_restaurantsFragment)
-                    }
+
+                      if ( it ) findNavController().navigate(R.id.action_registrationFragment_to_restaurantsFragment)
                 }
             }
         }

@@ -2,9 +2,10 @@ package com.reem.jahez.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.reem.jahez.base.BaseViewModel
 import com.reem.jahez.domain.usecase.LoginUseCase
-import com.reem.jahez.domain.models.AuthUiState
 import com.reem.jahez.domain.models.Resource
+import com.reem.jahez.domain.models.UiState
 import com.reem.jahez.domain.models.Validation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,10 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : ViewModel() {
+class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : BaseViewModel() {
 
-    private var _loginUiState = MutableSharedFlow<AuthUiState>()
-    val loginUiState: SharedFlow<AuthUiState> = _loginUiState
+    private var _loginUiState = MutableSharedFlow<Boolean>()
+    val loginUiState: SharedFlow<Boolean> = _loginUiState
 
     private var _validation= MutableStateFlow(Validation())
     val validation: SharedFlow<Validation> = _validation
@@ -27,9 +28,12 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : ViewM
         viewModelScope.launch {
             loginUseCase(email, password).collect {
                 when (it) {
-                    is Resource.Loading -> _loginUiState.emit(AuthUiState(isLoading = true))
-                    is Resource.Success -> _loginUiState.emit(AuthUiState(data = it.data))
-                    is Resource.Error -> _loginUiState.emit(AuthUiState(message = it.message.toString()))
+                    is Resource.Loading -> _uiState.emit(UiState(isLoading = true))
+                    is Resource.Success -> {
+                        _loginUiState.emit(it.data ?: false)
+                        _uiState.emit(UiState())
+                    }
+                    is Resource.Error -> _uiState.emit(UiState(message = it.message ?: ""))
                 }
             }
         }
