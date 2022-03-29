@@ -2,16 +2,35 @@ package com.reem.jahez.data.repository
 
 import com.google.firebase.auth.AuthResult
 import com.reem.jahez.data.AuthDataSource
+import com.reem.jahez.domain.models.Resource
 import com.reem.jahez.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(private val authDataSource: AuthDataSource) : AuthRepository{
-    override suspend fun createNewUser( userName:String, email:String,password:String): Boolean{
-        return authDataSource.createNewUser(userName, email, password)
-    }
+    override suspend fun createNewUser( userName:String, email:String,password:String): Flow<Resource<Boolean>> = flow{
+       try {
+            emit(Resource.Loading())
+            val response = authDataSource.createNewUser(userName, email, password)
+            emit(Resource.Success(data = response))
 
-    override suspend fun signIn(email: String, password: String): Boolean {
-        return authDataSource.logIn(email, password)
+        } catch (e:Exception){
+           emit(Resource.Error(message = e.message.toString()))
+        }
+        }
+
+
+    override suspend fun signIn(email: String, password: String): Flow<Resource<Boolean>> = flow {
+
+
+        try {
+            emit(Resource.Loading())
+            val response = authDataSource.logIn(email, password)
+            emit(Resource.Success(data = response))
+
+        } catch (e:Exception){
+            emit(Resource.Error(message = e.message.toString()))
+        }
     }
 }

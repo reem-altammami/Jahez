@@ -8,13 +8,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
-    suspend operator  fun invoke(email:String, password:String) : Flow<Resource<Boolean>> = flow{
-        try {
-            emit(Resource.Loading())
-            val isLogin = authRepository.signIn(email, password)
-            emit(Resource.Success(isLogin))
-        }catch (e : Exception){
-            emit(Resource.Error(e.message.toString()))
-        }
+    suspend operator fun invoke(email: String, password: String): Flow<Resource<Boolean>> {
+        return authRepository.signIn(email, password)
     }
 }
