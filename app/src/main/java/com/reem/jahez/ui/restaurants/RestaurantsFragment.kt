@@ -107,16 +107,12 @@ setBaseViewModel(restaurantsViewModel)
     }
 
     fun observeRestaurant(){
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                restaurantsViewModel.restaurantUi.collect {
-                    when {
+        collectFlow(restaurantsViewModel.restaurantUi){
+            when {
 
-                        it != null -> {
-                            binding.loading.visibility = View.GONE
-                            bindRecyclerView(binding.recyclerView, it)
-                        }
-                    }
+                it != null -> {
+                    binding.loading.visibility = View.GONE
+                    bindRecyclerView(binding.recyclerView, it)
                 }
             }
         }

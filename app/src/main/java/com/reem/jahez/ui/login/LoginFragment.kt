@@ -27,9 +27,9 @@ class LoginFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
-    findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
-}
+        if (Firebase.auth.currentUser?.uid?.isNotEmpty() == true) {
+            findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
+        }
     }
 
     override fun onCreateView(
@@ -49,65 +49,57 @@ if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
             findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
         }
         binding.loginButton.setOnClickListener {
-     clickLogin()
+            clickLogin()
         }
     }
 
     private fun updateLoginState() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                loginViewModel.loginUiState.collect {
 
-                        if (it) findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
-
-                }
-            }
+        collectFlow(loginViewModel.loginUiState){
+            if (it) findNavController().navigate(R.id.action_loginFragment_to_restaurantsFragment)
         }
     }
 
     private fun setEditTextError() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                loginViewModel.validation.collect {
-                    when (it.email) {
-                        0 -> {
-                            binding.emailField.error = getString(R.string.required_field)
-                        }
-                        2 -> {
-                            binding.emailField.error = getString(R.string.not_correct)
-                        }
-                        else -> {
-                            binding.emailField.error = null
-                        }
-                    }
-                    when (it.password) {
-                        0 -> {
-                            binding.passwordField.error = getString(R.string.required_field)
-                        }
-                        2 -> {
-                            binding.passwordField.error = getString(R.string.not_correct)
-                        }
-                        else -> {
-                            binding.passwordField.error = null
-                        }
-                    }
+        collectFlow(loginViewModel.validation){
+            when (it.email) {
+                0 -> {
+                    binding.emailField.error = getString(R.string.required_field)
                 }
-
+                2 -> {
+                    binding.emailField.error = getString(R.string.not_correct)
+                }
+                else -> {
+                    binding.emailField.error = null
+                }
+            }
+            when (it.password) {
+                0 -> {
+                    binding.passwordField.error = getString(R.string.required_field)
+                }
+                2 -> {
+                    binding.passwordField.error = getString(R.string.not_correct)
+                }
+                else -> {
+                    binding.passwordField.error = null
+                }
             }
         }
     }
 
-    private fun clickLogin(){
-        if( loginViewModel.validation(Firebase.auth.currentUser?.displayName.toString(),
+    private fun clickLogin() {
+        if (loginViewModel.validation(
+                Firebase.auth.currentUser?.displayName.toString(),
                 binding.email.text.toString(),
                 binding.password.text.toString(),
 
-            )){
+                )
+        ) {
             loginViewModel.login(
                 binding.email.text.toString(),
                 binding.password.text.toString()
             )
-        } else{
+        } else {
             setEditTextError()
         }
     }

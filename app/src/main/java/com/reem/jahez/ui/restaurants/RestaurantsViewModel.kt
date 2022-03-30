@@ -26,30 +26,18 @@ class RestaurantsViewModel @Inject constructor(val gerRestaurantsUseCase: GetRes
 
     fun getRestaurants() {
         viewModelScope.launch {
-            val restaurants = gerRestaurantsUseCase().collect { response ->
-                when (response) {
-                    is Resource.Loading ->
-                        _uiState.emit(UiState(isLoading = true))
-                    is Resource.Success -> {
-                        val restaurant = response.data?.map {
-                            RestaurantsItemUi(
-                                name = it.name!!,
-                                image = it.image!!,
-                                hasOffer = it.hasOffer!!,
-                                offer = it.offer ?: "",
-                                distance = it.distance!!,
-                                rate = it.rating!!.toString(),
-                            )
-                        }
-                        _restaurantUi.update { restaurant!! }
-                        _uiState.emit(UiState())
-                    }
-                    is Resource.Error ->
-
-                        _uiState.emit(UiState(message = response.message.toString()))
-
+            collectFlow(gerRestaurantsUseCase()){ response ->
+                val restaurant = response.data?.map {
+                    RestaurantsItemUi(
+                        name = it.name!!,
+                        image = it.image!!,
+                        hasOffer = it.hasOffer!!,
+                        offer = it.offer ?: "",
+                        distance = it.distance!!,
+                        rate = it.rating!!.toString(),
+                    )
                 }
-
+                _restaurantUi.update { restaurant!! }
             }
         }
     }

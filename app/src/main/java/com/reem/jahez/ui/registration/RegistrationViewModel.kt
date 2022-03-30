@@ -23,17 +23,11 @@ class RegistrationViewModel @Inject constructor(private val createNewUserUseCase
 
     fun createNewUser (userName:String,email: String, password:String){
         viewModelScope.launch {
-          createNewUserUseCase(userName,email, password).onEach {
-               when(it){
-                   is Resource.Loading -> _uiState.emit(UiState(isLoading = true))
-                   is  Resource.Success -> {
-                       _registrationUiState.emit(it.data ?: false)
-                       _uiState.emit(UiState())
-                   }
-                   is Resource.Error -> _uiState.emit(UiState(message = it.message.toString()))
-               }
-
-           }.launchIn(viewModelScope)
+            collectFlow(createNewUserUseCase(userName, email, password)){
+                viewModelScope.launch {
+                    _registrationUiState.emit(it.data ?: false)
+                }
+            }
         }
 
     }

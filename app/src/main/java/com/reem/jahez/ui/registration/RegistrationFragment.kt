@@ -56,55 +56,46 @@ class RegistrationFragment : BaseFragment() {
     }
 
     private fun updateRegistrationState() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                registrationViewModel.registrationUiState.collect {
-
-                      if ( it ) findNavController().navigate(R.id.action_registrationFragment_to_restaurantsFragment)
-                }
-            }
+        collectFlow(registrationViewModel.registrationUiState) {
+            if (it) findNavController().navigate(R.id.action_registrationFragment_to_restaurantsFragment)
         }
     }
 
     private fun setEditTextError() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                registrationViewModel.validation.collect {
-                    when(it.userName){
-                        0 -> {
-                            binding.usernameField.error = getString(R.string.required_field)
-                        }
-                        else -> {
-                            binding.usernameField.error = null
-                        }
-                    }
-                    when (it.email) {
-                        0 -> {
-                            binding.emailField.error = getString(R.string.required_field)
-                        }
-                        2 -> {
-                            binding.emailField.error = getString(R.string.not_correct)
-                        }
-                        else -> {
-                            binding.emailField.error = null
-                        }
-                    }
-                    when (it.password) {
-                        0 -> {
-                            binding.passwordField.error = getString(R.string.required_field)
-                        }
-                        2 -> {
-                            binding.passwordField.error = getString(R.string.not_correct)
-                        }
-                        else -> {
-                            binding.passwordField.error = null
-                        }
-                    }
+        collectFlow(registrationViewModel.validation){
+            when(it.userName){
+                0 -> {
+                    binding.usernameField.error = getString(R.string.required_field)
                 }
-
+                else -> {
+                    binding.usernameField.error = null
+                }
+            }
+            when (it.email) {
+                0 -> {
+                    binding.emailField.error = getString(R.string.required_field)
+                }
+                2 -> {
+                    binding.emailField.error = getString(R.string.not_correct)
+                }
+                else -> {
+                    binding.emailField.error = null
+                }
+            }
+            when (it.password) {
+                0 -> {
+                    binding.passwordField.error = getString(R.string.required_field)
+                }
+                2 -> {
+                    binding.passwordField.error = getString(R.string.not_correct)
+                }
+                else -> {
+                    binding.passwordField.error = null
+                }
             }
         }
-    }
+        }
+
     private fun clickRegistration(){
         if (registrationViewModel.validation(
                 binding.userName.text.toString(),

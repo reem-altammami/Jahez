@@ -26,14 +26,9 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : BaseV
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            loginUseCase(email, password).collect {
-                when (it) {
-                    is Resource.Loading -> _uiState.emit(UiState(isLoading = true))
-                    is Resource.Success -> {
-                        _loginUiState.emit(it.data ?: false)
-                        _uiState.emit(UiState())
-                    }
-                    is Resource.Error -> _uiState.emit(UiState(message = it.message ?: ""))
+            collectFlow(loginUseCase(email, password)){
+                viewModelScope.launch {
+                    _loginUiState.emit(it.data ?: false)
                 }
             }
         }

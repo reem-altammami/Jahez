@@ -2,12 +2,13 @@ package com.reem.jahez.base
 
 import android.app.UiAutomation
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.reem.jahez.domain.models.Resource
 import com.reem.jahez.domain.models.UiState
 import com.reem.jahez.domain.models.Validation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,7 +88,22 @@ open class BaseViewModel @Inject constructor(): ViewModel() {
                 }
                 return true
             }
+
         }
     }
 
+    fun <T> collectFlow(flow: Flow<T>, data: (T) -> Unit) {
+        viewModelScope.launch {
+            flow.collect{
+                when (it) {
+                    is Resource.Loading<*> -> _uiState.emit(UiState(isLoading = true))
+                    is Resource.Success<*> -> {
+                        data(it.data as T)
+                        _uiState.emit(UiState())
+                    }
+                    is Resource.Error<*> -> _uiState.emit(UiState(message = it.message ?: ""))
+                }
+            }
+        }
+    }
 }
