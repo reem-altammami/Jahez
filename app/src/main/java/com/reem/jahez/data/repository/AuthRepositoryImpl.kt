@@ -8,29 +8,31 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(private val authDataSource: AuthDataSource) : AuthRepository{
-    override suspend fun createNewUser( userName:String, email:String,password:String): Flow<Resource<Boolean>> = flow{
-       try {
-            emit(Resource.Loading())
-            val response = authDataSource.createNewUser(userName, email, password)
-            emit(Resource.Success(data = response))
+class AuthRepositoryImpl @Inject constructor(private val authDataSource: AuthDataSource) :
+    AuthRepository {
+    override suspend fun createNewUser(
+        userName: String,
+        email: String,
+        password: String
+    ): Flow<Resource<Boolean>> = flow {
 
-        } catch (e:Exception){
-           emit(Resource.Error(message = e.message.toString()))
+        emit(Resource.Loading())
+        val response = authDataSource.createNewUser(userName, email, password)
+        if (response.isSuccess) {
+            emit(Resource.Success(data = response.isSuccess))
+        } else {
+            emit(Resource.Error(message = response.errorMessage))
         }
-        }
 
-
-    override suspend fun signIn(email: String, password: String): Flow<Resource<Boolean>> = flow {
-
-
-        try {
-            emit(Resource.Loading())
-            val response = authDataSource.logIn(email, password)
-            emit(Resource.Success(data = response))
-
-        } catch (e:Exception){
-            emit(Resource.Error(message = e.message.toString()))
-        }
     }
+
+    override suspend fun signIn(email: String, password: String): Flow<Resource<Boolean>> = flow{
+        emit(Resource.Loading())
+        val response = authDataSource.logIn(email, password)
+        if (response.isSuccess) {
+            emit(Resource.Success(data = response.isSuccess))
+        } else {
+            emit(Resource.Error(message = response.errorMessage))
+        }    }
 }
+

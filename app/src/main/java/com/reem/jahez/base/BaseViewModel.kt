@@ -94,11 +94,15 @@ open class BaseViewModel @Inject constructor(): ViewModel() {
 
     fun <T> collectFlow(flow: Flow<T>, data: (T) -> Unit) {
         viewModelScope.launch {
-            flow.collect{
+            flow
+                .catch { error ->
+                _uiState.emit(UiState(message = error.message ?: ""))
+            }
+                .collect{
                 when (it) {
                     is Resource.Loading<*> -> _uiState.emit(UiState(isLoading = true))
                     is Resource.Success<*> -> {
-                        data(it.data as T)
+                        data(it)
                         _uiState.emit(UiState())
                     }
                     is Resource.Error<*> -> _uiState.emit(UiState(message = it.message ?: ""))
