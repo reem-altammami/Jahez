@@ -111,22 +111,12 @@ setBaseViewModel(restaurantsViewModel)
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 restaurantsViewModel.restaurantUi.collect {
                     when {
-//                        it.isLoading -> binding.loading.visibility = View.VISIBLE
-//                        it.restaurantsItemList != null -> {
-//                            binding.loading.visibility = View.GONE
-//                            bindRecyclerView(binding.recyclerView, it.restaurantsItemList)
-//                        }
 
                         it != null -> {
                             binding.loading.visibility = View.GONE
                             bindRecyclerView(binding.recyclerView, it)
                         }
-//                        it.message.isNotEmpty() -> {
-//                            binding.loading.visibility = View.GONE
-//                            binding.errorMessage.visibility = View.VISIBLE
-//                            binding.errorMessage.text = it.message
-//
-//                        }
+
                     }
                 }
             }
