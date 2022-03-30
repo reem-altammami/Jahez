@@ -98,9 +98,10 @@ if(Firebase.auth.currentUser?.uid?.isNotEmpty() == true){
     }
 
     private fun clickLogin(){
-        if( loginViewModel.validation(
+        if( loginViewModel.validation(Firebase.auth.currentUser?.displayName.toString(),
                 binding.email.text.toString(),
-                binding.password.text.toString()
+                binding.password.text.toString(),
+
             )){
             loginViewModel.login(
                 binding.email.text.toString(),

@@ -21,8 +21,8 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : BaseV
     private var _loginUiState = MutableSharedFlow<Boolean>()
     val loginUiState: SharedFlow<Boolean> = _loginUiState
 
-    private var _validation= MutableStateFlow(Validation())
-    val validation: SharedFlow<Validation> = _validation
+//    private var _validation= MutableStateFlow(Validation())
+//    val validation: SharedFlow<Validation> = _validation
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -40,58 +40,58 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase) : BaseV
     }
 
 
-fun validation(email:String ,password: String): Boolean {
-    validationEmail(email)
-            validationPassword(password)
-    return validationEmail(email)&&
-        validationPassword(password)
-}
-    private fun validationEmail(email: String): Boolean {
-        when {
-            email.isEmpty() -> {
-                _validation.update {
-                    it.copy(email = 0)
-                }
-                return false
-            }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _validation.update {
-                    it.copy(email = 2)
-                }
-                return false
-            }
-            else -> {
-                _validation.update {
-                    it.copy(email = 1)
-                }
-                return true
-            }
-        }
-    }
-
-    private fun validationPassword(password: String): Boolean {
-        when {
-            password.isEmpty() -> {
-                _validation.update {
-                    it.copy(password = 0)
-                }
-                return false
-            }
-            password.length < 6 -> {
-                _validation.update {
-                    it.copy(password = 2)
-                }
-                return false
-            }
-            else -> {
-                _validation.update {
-                    it.copy(password = 1)
-
-                }
-                return true
-            }
-        }
-    }
+//fun validation(email:String ,password: String): Boolean {
+//    validationEmail(email)
+//            validationPassword(password)
+//    return validationEmail(email)&&
+//        validationPassword(password)
+//}
+//    private fun validationEmail(email: String): Boolean {
+//        when {
+//            email.isEmpty() -> {
+//                _validation.update {
+//                    it.copy(email = 0)
+//                }
+//                return false
+//            }
+//            !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+//                _validation.update {
+//                    it.copy(email = 2)
+//                }
+//                return false
+//            }
+//            else -> {
+//                _validation.update {
+//                    it.copy(email = 1)
+//                }
+//                return true
+//            }
+//        }
+//    }
+//
+//    private fun validationPassword(password: String): Boolean {
+//        when {
+//            password.isEmpty() -> {
+//                _validation.update {
+//                    it.copy(password = 0)
+//                }
+//                return false
+//            }
+//            password.length < 6 -> {
+//                _validation.update {
+//                    it.copy(password = 2)
+//                }
+//                return false
+//            }
+//            else -> {
+//                _validation.update {
+//                    it.copy(password = 1)
+//
+//                }
+//                return true
+//            }
+//        }
+//    }
 
 
 }

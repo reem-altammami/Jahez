@@ -116,7 +116,6 @@ setBaseViewModel(restaurantsViewModel)
                             binding.loading.visibility = View.GONE
                             bindRecyclerView(binding.recyclerView, it)
                         }
-
                     }
                 }
             }
