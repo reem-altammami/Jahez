@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.reem.jahez.R
+import com.reem.jahez.base.BaseFragment
 import com.reem.jahez.databinding.FragmentRestaurantsBinding
 import com.reem.jahez.ui.bindRecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.restaurant_item.*
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RestaurantsFragment : Fragment() {
+class RestaurantsFragment : BaseFragment() {
     private var _binding: FragmentRestaurantsBinding? = null
     private val binding get() = _binding!!
     private val restaurantsViewModel: RestaurantsViewModel by viewModels()
@@ -36,7 +37,7 @@ class RestaurantsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentRestaurantsBinding.inflate(inflater, container, false)
-
+setBaseViewModel(restaurantsViewModel)
         return binding.root
     }
 
@@ -110,17 +111,22 @@ class RestaurantsFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 restaurantsViewModel.restaurantUi.collect {
                     when {
-                        it.isLoading -> binding.loading.visibility = View.VISIBLE
-                        it.restaurantsItemList != null -> {
-                            binding.loading.visibility = View.GONE
-                            bindRecyclerView(binding.recyclerView, it.restaurantsItemList)
-                        }
-                        it.message.isNotEmpty() -> {
-                            binding.loading.visibility = View.GONE
-                            binding.errorMessage.visibility = View.VISIBLE
-                            binding.errorMessage.text = it.message
+//                        it.isLoading -> binding.loading.visibility = View.VISIBLE
+//                        it.restaurantsItemList != null -> {
+//                            binding.loading.visibility = View.GONE
+//                            bindRecyclerView(binding.recyclerView, it.restaurantsItemList)
+//                        }
 
+                        it != null -> {
+                            binding.loading.visibility = View.GONE
+                            bindRecyclerView(binding.recyclerView, it)
                         }
+//                        it.message.isNotEmpty() -> {
+//                            binding.loading.visibility = View.GONE
+//                            binding.errorMessage.visibility = View.VISIBLE
+//                            binding.errorMessage.text = it.message
+//
+//                        }
                     }
                 }
             }
